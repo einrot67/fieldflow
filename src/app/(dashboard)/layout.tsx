@@ -16,9 +16,9 @@ export default async function DashboardLayout({
   }
 
   const user = {
-    name: session.user.name,
-    email: session.user.email,
-    role: (session.user as any).role,
+    name: session.user.name ?? null,
+    email: session.user.email ?? null,
+    role: (session.user as any).role ?? null,
   }
 
   return (

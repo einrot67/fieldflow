@@ -11,15 +11,21 @@ export default async function DashboardLayout({
 }) {
   const session = await getServerSession(authOptions)
 
-  if (!session) {
+  if (!session?.user) {
     redirect('/auth/login')
+  }
+
+  const user = {
+    name: session.user.name,
+    email: session.user.email,
+    role: (session.user as any).role,
   }
 
   return (
     <div className="flex h-screen bg-background">
-      <Sidebar user={session.user} />
+      <Sidebar user={user} />
       <div className="flex-1 flex flex-col overflow-hidden">
-        <Header user={session.user} />
+        <Header user={user} />
         <main className="flex-1 overflow-y-auto p-6">
           {children}
         </main>

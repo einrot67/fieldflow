@@ -80,11 +80,18 @@ async function getDashboardStats(companyId: string) {
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
 
-  if (!session?.user?.companyId) {
+  if (!session?.user) {
     redirect('/auth/login')
   }
 
-  const stats = await getDashboardStats(session.user.companyId)
+  const user = session.user as any
+  const companyId = user.companyId
+
+  if (!companyId) {
+    redirect('/auth/login')
+  }
+
+  const stats = await getDashboardStats(companyId)
 
   return (
     <div className="space-y-6">
@@ -110,7 +117,7 @@ export default async function DashboardPage() {
           <RecentJobs />
         </div>
         <UpcomingSchedule jobs={stats.upcomingJobs} />
-      </div>
+     </div>
 
       <div className="grid gap-6 md:grid-cols-2">
         <ActivityFeed activities={stats.recentActivity} />
